@@ -1,21 +1,35 @@
-const guessedLetters = doucment.querySelector("guessed-letters")
-const guessButton = document.querySelector("guess");
-const letterTextField = document.querySelector("letter");
-const wordProgress = document.querySelector("word-in-progress");
-const remainGuess = document.querySelector("remaining"); 
-const remainGuessSpan = document.querySelector("remaining span");
-const motivateMessage = document.querySelector("message");
-const playAgainButton = document.querySelector("play-again");
-const word = "magnolia";
+const guessedLetters = document.querySelector(".guessed-letters"); //unordered list for guessed letters
+const guessButton = document.querySelector(".guess"); //button with the text Guess!
+const letterTextField = document.querySelector(".letter"); //text input for player to guess letters
+const wordProgress = document.querySelector(".word-in-progress"); //paragraph where word in progress will show
+const remainGuess = document.querySelector(".remaining"); //paragraph where # of remaining guesses
+const remainGuessSpan = document.querySelector(".remaining span"); //span section of # of remaining guesses paragraph
+const motivateMessage = document.querySelector(".message"); //motivational message to player
+const playAgainButton = document.querySelector(".play-again"); //hidden button for playing again
 
+//starting word to test game functionality
+const word = "magnolia";  
 
-
-
-document.addEventListener("keydown", function(e)) {
-    const letter = e.key;
-    guessedLetters = document.createElement("li");
-    li.append(letter);
+// Visible bullet point placeholder for letters in word (note word is a fixed right now as "magnolia")
+const updateWord = function (word) {
+    const placeHolder = []; //empty array
+    for (const letter of word) { //not sure how letter knows to be magnolia
+        placeHolder.push("●");
+        console.log(letter);
+    }  
+    wordProgress.innerText = placeHolder.join(""); 
 };
+
+//  
+updateWord(word);
+
+
+
+// document.addEventListener("keydown", function(e)) {
+    // const letter = e.key;
+    // guessedLetters = document.createElement("li");
+    // li.append(letter);
+// };
 
 
 
