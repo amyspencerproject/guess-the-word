@@ -13,24 +13,25 @@ const word = "magnolia";
 // Visible bullet point placeholder for letters in word (note word is a fixed right now as "magnolia")
 const updateWord = function (word) {
     const placeHolder = []; //empty array
-    for (const letter of word) { //not sure how letter knows to be magnolia
+    for (const letter of word) { //loops thru each letter of the string
         placeHolder.push("●");
-        console.log(letter);
+        // console.log(letter);
     }  
     wordProgress.innerText = placeHolder.join(""); 
 };
 
-//  
 updateWord(word);
 
 
 
-// document.addEventListener("keydown", function(e)) {
-    // const letter = e.key;
-    // guessedLetters = document.createElement("li");
-    // li.append(letter);
-// };
-
+guessButton.addEventListener("click", function(e) {
+    e.preventDefault();
+    const letterGuess = letterTextField.value;
+    //guessedLetters = document.createElement("li");
+    //li.append(letterGuess);
+    console.log (letterGuess);
+    letterTextField.value = "";
+});
 
 
 
