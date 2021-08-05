@@ -10,6 +10,8 @@ const playAgainButton = document.querySelector(".play-again"); //hidden button f
 //starting word to test game functionality
 const word = "magnolia";  
 
+const guessedLettersArray = []; //Empty array where letters that have been guessed will be put
+
 // Visible bullet point placeholder for letters in word (note word is a fixed right now as "magnolia")
 const updateWord = function (word) {
     const placeHolder = []; //empty array
@@ -23,15 +25,71 @@ const updateWord = function (word) {
 updateWord(word);
 
 
-
+//Event listener for Guess! button
 guessButton.addEventListener("click", function(e) {
-    e.preventDefault();
-    const letterGuess = letterTextField.value;
-    //guessedLetters = document.createElement("li");
-    //li.append(letterGuess);
-    console.log (letterGuess);
-    letterTextField.value = "";
+    e.preventDefault(); //prevents the entire page from reloading everytime a guess is made by player
+    motivateMessage.innerText = ""; // clears previous motivate message
+
+    const guess = letterTextField.value; //grabs value from text imput field
+    // console.log(guess);
+
+    const validGuess = inputValidator(guess); //call the function that validates the letter guessed
+
+    if (validGuess) {
+        makeGuess(guess);
+    }
+    letterTextField.value = ""; // clears the text input field
 });
+
+//Validating the text input of the letter guessed by player
+// Solution code used input in place of guess???
+const inputValidator = function (guess) {
+    const acceptedLetter = /[a-zA-Z]/;
+
+    if (guess.length === 0) {
+        motivateMessage.innerText = "Please guess a letter A thru Z!";
+
+    } else if (guess.length >1) {
+        motivateMessage.innerText = "Only one letter at a time!";
+
+    } else if (!guess.match(acceptedLetter)) {
+        motivateMessage.innerText = "Letters only for this game. Try again!"
+
+    } else {
+        return  guess;
+    }
+};
+
+
+//Transform valid guess input into all caps and add to array of guessed letters. Ensure no duplicate letters
+//Solution code uses guess as parameter. I have tried validGuess as well but still not functioning
+const makeGuess = function(guess) {
+    guess = guess.toUpperCase();
+    // console.log(guess);
+
+    if (guessedLettersArray.includes(guess)) {
+        motivateMessage.innerText = "You already guessed that letter. Try again!";
+
+    } else {
+        // motivateMessage.innerText = "Good guess!";
+        guessedLettersArray.push(guess);
+        console.log(guessedLettersArray);
+    }
+    // console.log(guessLettersArray);
+};
+
+
+
+
+//CHICKEN SCRATCH
+//guessedLetters = document.createElement("li");
+    //li.append(letterGuess);
+
+    // for (letter of guessedLetters)
+
+// if guess === guessedLetters
+
+// makeGuess(validGuess);
 
 
 
