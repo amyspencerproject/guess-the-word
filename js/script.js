@@ -71,12 +71,52 @@ const makeGuess = function(guess) {
         motivateMessage.innerText = "You already guessed that letter. Try again!";
 
     } else {
-        // motivateMessage.innerText = "Good guess!";
         guessedLettersArray.push(guess);
-        console.log(guessedLettersArray);
+        // console.log(guessedLetters);
+        dipslayGuessedLetters();
+        // displayGuessedLetters(guessedLetters);
+        replaceLetters (guessedLettersArray);
+        //replace bullet point place holders with correct letters of word
     }
-    // console.log(guessLettersArray);
+    // console.log(guessedLettersArray);
 };
+
+//Display all letters that player has guessed 
+dipslayGuessedLetters = function () {
+    guessedLetters.innerHTML = "";
+    for (const letter of guessedLettersArray) {
+        const li = document.createElement("li");
+        li.innerText=letter;
+        guessedLetters.append(li);
+    }
+};
+
+
+//Display all correct letters that player has guessed replacing the placeholder bullet point
+const replaceLetters = function(guessedLettersArray) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    const displayWord = [];
+    // console.log(wordArray);
+    for (const letter of wordArray) {
+        if (guessedLettersArray.includes(letter)) {
+            displayWord.push(letter.toUpperCase());
+        } else {
+            displayWord.push("●");
+        }
+    }
+    wordProgress.innerText = displayWord.join("");
+    checkWin();
+};
+
+const checkWin = function () {
+    if (word.toUpperCase() === wordProgress.innerText) {
+        // console.log ("Congrats you won!");
+        motivateMessage.classList.add("win")
+        motivateMessage.innerHTML = `<p class="hightlight">You guessed correct the word! Congrats!</p>`
+    }
+};
+
 
 
 
