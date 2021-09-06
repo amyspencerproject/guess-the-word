@@ -6,11 +6,24 @@ const remainGuess = document.querySelector(".remaining"); //paragraph where # of
 const remainGuessSpan = document.querySelector(".remaining span"); //span section of # of remaining guesses paragraph
 const motivateMessage = document.querySelector(".message"); //motivational message to player
 const playAgainButton = document.querySelector(".play-again"); //hidden button for playing again
-
-//starting word to test game functionality
-const word = "magnolia";  
-
+// let word = [];
+let word = "magnolia";  //starting word to test game functionality
 const guessedLettersArray = []; //Empty array where letters that have been guessed will be put
+let remainingGuesses = 8;  //number of guesses allowed, makes game easy or hard
+
+//Async function that pulls data from a text file
+const getWord = async function() {
+    const response = await fetch( "https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
+    const wordResponse = await response.text();
+    const wordArray = wordResponse.split("/n"); //turns wordResponse into an array deliminated by "/"
+    // console.log(wordArray);
+    const randomIndex = Math.floor( Math.random() * wordArray.length); //randomly selects word (via index) in array
+    word = wordArray[randomIndex].trim(); //removes spaces from word
+    updateWord(word);
+    // console.log(word);
+};
+
+getWord();
 
 // Visible bullet point placeholder for letters in word (note word is a fixed right now as "magnolia")
 const updateWord = function (word) {
@@ -77,8 +90,9 @@ const makeGuess = function(guess) {
         // displayGuessedLetters(guessedLetters);
         replaceLetters (guessedLettersArray);
         //replace bullet point place holders with correct letters of word
+        countRemainingGuesses(guess);
+        //subract letters guessed from remaining guesses
     }
-    // console.log(guessedLettersArray);
 };
 
 //Display all letters that player has guessed 
@@ -109,11 +123,30 @@ const replaceLetters = function(guessedLettersArray) {
     checkWin();
 };
 
+const countRemainingGuesses = function (guess) {   
+    const upperWord = word.toUpperCase(); //make the word uppercase to match guessed letter case
+    if (!upperWord.includes(guess)) {
+        motivateMessage.innerText = `Sorry ${guess} is not correct.`;
+        remainingGuesses -= 1 ; 
+    } else {
+        motivateMessage.innerText = `Excellent choice, ${guess} is correct!`;
+    } 
+    
+    if (remainingGuesses === 0) {
+        motivateMessage.innerText = `Sorry game over! The word was ${word}`;
+    } else if (remainingGuesses === 1) {
+        remainGuessSpan.innerText = `${remainingGuesses} guess`;
+    } else {
+        remainGuessSpan.innerText = `${remainingGuesses} guesses`;
+    }
+    console.log(remainingGuesses);
+};
+
 const checkWin = function () {
     if (word.toUpperCase() === wordProgress.innerText) {
         // console.log ("Congrats you won!");
-        motivateMessage.classList.add("win")
-        motivateMessage.innerHTML = `<p class="hightlight">You guessed correct the word! Congrats!</p>`
+        motivateMessage.classList.add("win");
+        motivateMessage.innerHTML = `<p class="hightlight">You guessed correct the word! Congrats!</p>`;
     }
 };
 
