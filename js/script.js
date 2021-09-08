@@ -12,18 +12,15 @@ const guessedLettersArray = []; //Empty array where letters that have been guess
 let remainingGuesses = 8;  //number of guesses allowed, makes game easy or hard
 
 //Async function that pulls data from a text file
-const getWord = async function() {
+const getWord = async function () {
     const response = await fetch( "https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
     const wordResponse = await response.text();
-    const wordResponseArray = wordResponse.split("/n"); //turns wordResponse into an array deliminated by "/"
-    // console.log(wordResponseArray);
+    const wordResponseArray = wordResponse.split("\n"); //turns wordResponse into an array deliminated by "/"
+    console.log(wordResponseArray);
     const randomIndex = Math.floor( Math.random() * wordResponseArray.length ); //randomly selects word (via index) in array
-    // console.log(randomIndex);
     word = wordResponseArray[randomIndex].trim(); //removes spaces from word
     updateWord(word);
-    // console.log(word);
 };
-
 getWord();
 
 // Visible bullet point placeholder for letters in word (note word is a fixed right now as "magnolia")
