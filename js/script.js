@@ -8,7 +8,7 @@ const motivateMessage = document.querySelector(".message"); //motivational messa
 const playAgainButton = document.querySelector(".play-again"); //hidden button for playing again
 // let word = [];
 let word = "magnolia";  //starting word to test game functionality
-const guessedLettersArray = []; //Empty array where letters that have been guessed will be put
+let guessedLettersArray = []; //Empty array where letters that have been guessed will be put
 let remainingGuesses = 8;  //number of guesses allowed, makes game easy or hard
 
 //Async function that pulls data from a text file
@@ -16,24 +16,24 @@ const getWord = async function () {
     const response = await fetch( "https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
     const wordResponse = await response.text();
     const wordResponseArray = wordResponse.split("\n"); //turns wordResponse into an array deliminated by "/"
-    console.log(wordResponseArray);
     const randomIndex = Math.floor( Math.random() * wordResponseArray.length ); //randomly selects word (via index) in array
     word = wordResponseArray[randomIndex].trim(); //removes spaces from word
+    console.log(word);
     updateWord(word);
 };
+//Start game
 getWord();
 
-// Visible bullet point placeholder for letters in word (note word is a fixed right now as "magnolia")
+// Visible bullet point placeholder for letters in word to be guessed
 const updateWord = function (word) {
     const placeHolder = []; //empty array
     for (const letter of word) { //loops thru each letter of the string
         placeHolder.push("●");
-        // console.log(letter);
     }  
     wordProgress.innerText = placeHolder.join(""); 
 };
 
-updateWord(word);
+// updateWord(word);
 
 
 //Event listener for Guess! button
@@ -67,7 +67,7 @@ const inputValidator = function (guess) {
         motivateMessage.innerText = "Letters only for this game. Try again!"
 
     } else {
-        return  guess;
+        return guess;
     }
 };
 
@@ -83,9 +83,7 @@ const makeGuess = function(guess) {
 
     } else {
         guessedLettersArray.push(guess);
-        // console.log(guessedLetters);
         dipslayGuessedLetters();
-        // displayGuessedLetters(guessedLetters);
         replaceLetters (guessedLettersArray);
         //replace bullet point place holders with correct letters of word
         countRemainingGuesses(guess);
@@ -98,7 +96,7 @@ dipslayGuessedLetters = function () {
     guessedLetters.innerHTML = "";
     for (const letter of guessedLettersArray) {
         const li = document.createElement("li");
-        li.innerText=letter;
+        li.innerText = letter;
         guessedLetters.append(li);
     }
 };
@@ -118,7 +116,7 @@ const replaceLetters = function(guessedLettersArray) {
         }
     }
     wordProgress.innerText = displayWord.join("");
-    checkWin();
+    // checkWin();
 };
 
 const countRemainingGuesses = function (guess) {   
@@ -128,39 +126,49 @@ const countRemainingGuesses = function (guess) {
         remainingGuesses -= 1 ; 
     } else {
         motivateMessage.innerText = `Excellent choice, ${guess} is correct!`;
+        checkWin();
     } 
     
     if (remainingGuesses === 0) {
-        motivateMessage.innerText = `Sorry game over! The word was ${word}`;
+        motivateMessage.innerHTML = `Sorry game over! The word was <span class="highlight">${word}</span>`;
+        startOver();
     } else if (remainingGuesses === 1) {
         remainGuessSpan.innerText = `${remainingGuesses} guess`;
     } else {
         remainGuessSpan.innerText = `${remainingGuesses} guesses`;
     }
-    console.log(remainingGuesses);
 };
 
 const checkWin = function () {
     if (word.toUpperCase() === wordProgress.innerText) {
-        // console.log ("Congrats you won!");
         motivateMessage.classList.add("win");
-        motivateMessage.innerHTML = `<p class="hightlight">You guessed correct the word! Congrats!</p>`;
+        motivateMessage.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+
+        startOver();
     }
 };
 
+const startOver = function () {
+    guessButton.classList.add("hide");
+    guessedLetters.classList.add("hide");
+    remainGuess.classList.add("hide");
+    playAgainButton.classList.remove("hide");
+};
 
+playAgainButton.addEventListener("click", function() {
+    motivateMessage.classList.remove("win");
+    remainingGuesses = 8;
+    remainGuessSpan.innerText = `${remainingGuesses} guesses`; //reset guesses counter for user
+    guessedLettersArray = []; //clear guessed letters
+    guessedLetters.innerHTML = ""; //clear guessed letters from unordered list
+    motivateMessage.innerText = ""; //reset message
+    // get a new word
+    getWord();
 
-
-
-//CHICKEN SCRATCH
-//guessedLetters = document.createElement("li");
-    //li.append(letterGuess);
-
-    // for (letter of guessedLetters)
-
-// if guess === guessedLetters
-
-// makeGuess(validGuess);
-
-
+    //Restore all the elements for user to play game again
+    guessButton.classList.remove("hide");
+    guessedLetters.classList.remove("hide");
+    remainGuess.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+});
 
