@@ -18,9 +18,10 @@ const getWord = async function () {
     const wordResponseArray = wordResponse.split("\n"); //turns wordResponse into an array deliminated by "/"
     const randomIndex = Math.floor( Math.random() * wordResponseArray.length ); //randomly selects word (via index) in array
     word = wordResponseArray[randomIndex].trim(); //removes spaces from word
-    console.log(word);
+    //console.log(word);
     updateWord(word);
 };
+
 //Start game
 getWord();
 
@@ -33,16 +34,12 @@ const updateWord = function (word) {
     wordProgress.innerText = placeHolder.join(""); 
 };
 
-// updateWord(word);
-
-
 //Event listener for Guess! button
 guessButton.addEventListener("click", function(e) {
     e.preventDefault(); //prevents the entire page from reloading everytime a guess is made by player
     motivateMessage.innerText = ""; // clears previous motivate message
 
     const guess = letterTextField.value; //grabs value from text imput field
-    // console.log(guess);
 
     const validGuess = inputValidator(guess); //call the function that validates the letter guessed
 
@@ -53,41 +50,38 @@ guessButton.addEventListener("click", function(e) {
 });
 
 //Validating the text input of the letter guessed by player
-// Solution code used input in place of guess???
-const inputValidator = function (guess) {
+// Solution code used input. I used guess initially
+const inputValidator = function (input) {
     const acceptedLetter = /[a-zA-Z]/;
 
-    if (guess.length === 0) {
+    if (input.length === 0) {
         motivateMessage.innerText = "Please guess a letter A thru Z!";
 
-    } else if (guess.length >1) {
+    } else if (input.length >1) {
         motivateMessage.innerText = "Only one letter at a time!";
 
-    } else if (!guess.match(acceptedLetter)) {
+    } else if (!input.match(acceptedLetter)) {
         motivateMessage.innerText = "Letters only for this game. Try again!"
 
     } else {
-        return guess;
+        return input;
     }
 };
 
-
 //Transform valid guess input into all caps and add to array of guessed letters. Ensure no duplicate letters
-//Solution code uses guess as parameter. I have tried validGuess as well but still not functioning
 const makeGuess = function(guess) {
     guess = guess.toUpperCase();
-    // console.log(guess);
 
     if (guessedLettersArray.includes(guess)) {
         motivateMessage.innerText = "You already guessed that letter. Try again!";
 
     } else {
         guessedLettersArray.push(guess);
-        dipslayGuessedLetters();
-        replaceLetters (guessedLettersArray);
-        //replace bullet point place holders with correct letters of word
         countRemainingGuesses(guess);
         //subract letters guessed from remaining guesses
+        dipslayGuessedLetters(); 
+        replaceLetters (guessedLettersArray);
+        //replace bullet point place holders with correct letters of word
     }
 };
 
@@ -101,13 +95,12 @@ dipslayGuessedLetters = function () {
     }
 };
 
-
 //Display all correct letters that player has guessed replacing the placeholder bullet point
 const replaceLetters = function(guessedLettersArray) {
     const wordUpper = word.toUpperCase();
     const wordArray = wordUpper.split("");
     const displayWord = [];
-    // console.log(wordArray);
+
     for (const letter of wordArray) {
         if (guessedLettersArray.includes(letter)) {
             displayWord.push(letter.toUpperCase());
@@ -116,7 +109,7 @@ const replaceLetters = function(guessedLettersArray) {
         }
     }
     wordProgress.innerText = displayWord.join("");
-    // checkWin();
+    checkWin();
 };
 
 const countRemainingGuesses = function (guess) {   
@@ -126,7 +119,6 @@ const countRemainingGuesses = function (guess) {
         remainingGuesses -= 1 ; 
     } else {
         motivateMessage.innerText = `Excellent choice, ${guess} is correct!`;
-        checkWin();
     } 
     
     if (remainingGuesses === 0) {
@@ -148,13 +140,6 @@ const checkWin = function () {
     }
 };
 
-const startOver = function () {
-    guessButton.classList.add("hide");
-    guessedLetters.classList.add("hide");
-    remainGuess.classList.add("hide");
-    playAgainButton.classList.remove("hide");
-};
-
 playAgainButton.addEventListener("click", function() {
     motivateMessage.classList.remove("win");
     remainingGuesses = 8;
@@ -162,6 +147,7 @@ playAgainButton.addEventListener("click", function() {
     guessedLettersArray = []; //clear guessed letters
     guessedLetters.innerHTML = ""; //clear guessed letters from unordered list
     motivateMessage.innerText = ""; //reset message
+    
     // get a new word
     getWord();
 
@@ -172,3 +158,9 @@ playAgainButton.addEventListener("click", function() {
     playAgainButton.classList.add("hide");
 });
 
+const startOver = function () {
+    guessButton.classList.add("hide");
+    guessedLetters.classList.add("hide");
+    remainGuess.classList.add("hide");
+    playAgainButton.classList.remove("hide");
+};
