@@ -20,7 +20,7 @@ const getWord = async function () {
     const wordResponseArray = wordResponse.split("\n"); //turns wordResponse into an array deliminated by "/"
     const randomIndex = Math.floor( Math.random() * wordResponseArray.length ); //randomly selects word (via index) in array
     word = wordResponseArray[randomIndex].trim(); //removes spaces from word
-    console.log(word);
+    //console.log(word);
     updateWord(word);
 };
 
@@ -158,6 +158,8 @@ playAgainButton.addEventListener("click", function() {
     guessedLetters.classList.remove("hide");
     remainGuess.classList.remove("hide");
     playAgainButton.classList.add("hide");
+    guessInputLabel.classList.remove("hide");
+    letterTextField.classList.remove("hide");
 });
 
 const startOver = function () {
