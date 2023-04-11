@@ -1,5 +1,7 @@
 const guessedLetters = document.querySelector(".guessed-letters"); //unordered list for guessed letters
 const guessButton = document.querySelector(".guess"); //button with the text Guess!
+const guessInputLabel = document.querySelector(".letter-label"); //label on dialoge box where guesses are typed in
+// const guessInput= document.querySelector(".letter-input"); //dialoge box where guesses are typed in
 const letterTextField = document.querySelector(".letter"); //text input for player to guess letters
 const wordProgress = document.querySelector(".word-in-progress"); //paragraph where word in progress will show
 const remainGuess = document.querySelector(".remaining"); //paragraph where # of remaining guesses
@@ -18,7 +20,7 @@ const getWord = async function () {
     const wordResponseArray = wordResponse.split("\n"); //turns wordResponse into an array deliminated by "/"
     const randomIndex = Math.floor( Math.random() * wordResponseArray.length ); //randomly selects word (via index) in array
     word = wordResponseArray[randomIndex].trim(); //removes spaces from word
-    //console.log(word);
+    console.log(word);
     updateWord(word);
 };
 
@@ -79,14 +81,14 @@ const makeGuess = function(guess) {
         guessedLettersArray.push(guess);
         countRemainingGuesses(guess);
         //subract letters guessed from remaining guesses
-        dipslayGuessedLetters(); 
+        displayGuessedLetters(); 
         replaceLetters (guessedLettersArray);
         //replace bullet point place holders with correct letters of word
     }
 };
 
 //Display all letters that player has guessed 
-dipslayGuessedLetters = function () {
+displayGuessedLetters = function () {
     guessedLetters.innerHTML = "";
     for (const letter of guessedLettersArray) {
         const li = document.createElement("li");
@@ -163,4 +165,6 @@ const startOver = function () {
     guessedLetters.classList.add("hide");
     remainGuess.classList.add("hide");
     playAgainButton.classList.remove("hide");
+    guessInputLabel.classList.add("hide");
+    letterTextField.classList.add("hide");
 };
